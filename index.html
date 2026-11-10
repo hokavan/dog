@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tìm Bạn Bốn Chân</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF4DE; --bg2:#FFE9C2; --card:#FFFFFF; --ink:#2B2340; --ink-soft:#5E5577; --line:#2B2340;
+  --yellow:#FFD23F; --pink:#FF6B9D; --teal:#2EC4B6; --purple:#8B5CF6; --orange:#FF8C42; --green:#3FB97A; --sky:#5BB8FF;
+  --chip:#FFF8EA; --track:#F1E6D2; --shadow:5px 5px 0 var(--line);
+  --lv1:#3FB97A; --lv2:#2EC4B6; --lv3:#FF8C42; --lv4:#FF5C7A;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1D1830; --bg2:#262040; --card:#2D2648; --ink:#FFF4E0; --ink-soft:#C9BFE3; --line:#0E0B18;
+    --chip:#3A3260; --track:#3F3766; --shadow:5px 5px 0 #0E0B18;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1D1830; --bg2:#262040; --card:#2D2648; --ink:#FFF4E0; --ink-soft:#C9BFE3; --line:#0E0B18;
+  --chip:#3A3260; --track:#3F3766; --shadow:5px 5px 0 #0E0B18;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:16px; line-height:1.5;
+  background-image:radial-gradient(var(--bg2) 2px, transparent 2.5px); background-size:26px 26px;
+  overflow-x:hidden;
+}
+h1,h2,h3,.fun{font-family:"Baloo 2","Nunito",system-ui,sans-serif; line-height:1.15; margin:0}
+.wrap{max-width:1100px; margin:0 auto; padding:24px 16px 60px}
+.card{background:var(--card); border:3px solid var(--line); border-radius:22px; box-shadow:var(--shadow)}
+button{font:inherit; color:inherit; cursor:pointer}
+
+/* ---------- header ---------- */
+header.hero{position:relative; padding:28px 24px; display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center;
+  background:var(--yellow); color:#2B2340; overflow:hidden}
+header.hero h1{font-size:clamp(34px,6vw,58px); font-weight:800; letter-spacing:-.5px}
+header.hero h1 span{display:inline-block; background:#fff; padding:0 12px; border:3px solid #2B2340; border-radius:14px; transform:rotate(-2deg); margin-left:4px}
+header.hero p{margin:10px 0 0; font-weight:700; font-size:17px; max-width:640px}
+.tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.tag{background:#fff; border:2.5px solid #2B2340; border-radius:999px; padding:3px 12px; font-weight:800; font-size:14px}
+.mascot{font-size:clamp(70px,12vw,120px); line-height:1; animation:bob 2.2s ease-in-out infinite; filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18)); user-select:none}
+.bone{position:absolute; font-size:26px; opacity:.35; pointer-events:none}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-10px) rotate(4deg)}}
+
+/* ---------- section titles ---------- */
+.sec{margin-top:34px}
+.sec-title{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+.sec-title .num{width:44px; height:44px; flex:none; border-radius:50%; border:3px solid var(--line); display:grid; place-items:center;
+  font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800; font-size:22px; color:#2B2340; box-shadow:3px 3px 0 var(--line)}
+.sec-title h2{font-size:clamp(24px,3.6vw,32px); font-weight:800}
+.sec-title small{display:block; font-family:"Nunito",system-ui,sans-serif; font-weight:700; color:var(--ink-soft); font-size:14px}
+
+/* ---------- questions ---------- */
+.qgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px}
+.q{padding:18px}
+.q .qh{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.q .qe{font-size:30px; width:50px; height:50px; display:grid; place-items:center; border-radius:16px; border:3px solid var(--line); flex:none}
+.q h3{font-size:20px; font-weight:700}
+.opts{display:flex; flex-wrap:wrap; gap:10px}
+.opt{border:3px solid var(--line); background:var(--chip); border-radius:999px; padding:8px 16px; font-weight:800; font-size:15px;
+  box-shadow:3px 3px 0 var(--line); transition:transform .12s, box-shadow .12s, background .15s}
+.opt:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--line)}
+.opt:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--line)}
+.opt[aria-pressed="true"]{background:var(--accent,var(--pink)); color:#2B2340}
+.opt:focus-visible{outline:3px dashed var(--purple); outline-offset:3px}
+
+/* ---------- speech bubble ---------- */
+.bubble-row{display:flex; gap:14px; align-items:flex-end; margin-top:26px}
+.bubble-row .dog{font-size:64px; line-height:1; animation:bob 2.6s ease-in-out infinite; flex:none}
+.bubble{position:relative; padding:16px 20px; font-weight:700; font-size:17px; flex:1}
+.bubble::before{content:""; position:absolute; left:-17px; bottom:18px; border:14px solid transparent; border-right-color:var(--line)}
+.bubble::after{content:""; position:absolute; left:-10px; bottom:21px; border:11px solid transparent; border-right-color:var(--card)}
+.bubble b{color:var(--pink)}
+
+/* ---------- podium ---------- */
+.podium{display:grid; grid-template-columns:1fr 1.12fr 1fr; gap:16px; align-items:end}
+.pod{padding:18px 16px 16px; text-align:center; cursor:pointer; position:relative; transition:transform .15s}
+.pod:hover{transform:translateY(-4px) rotate(-.6deg)}
+.pod:focus-visible{outline:3px dashed var(--purple); outline-offset:4px}
+.pod .medal{font-size:44px; line-height:1}
+.pod.p1{background:linear-gradient(180deg,#FFE17A, var(--card) 62%); padding-top:26px}
+.pod.p1 .medal{font-size:58px; animation:wiggle 1.8s ease-in-out infinite}
+.pod h3{font-size:22px; font-weight:800; margin:8px 0 4px}
+.pod .meta{font-weight:700; color:var(--ink-soft); font-size:14px}
+.ring{--v:0; width:104px; height:104px; margin:12px auto 8px; border-radius:50%; display:grid; place-items:center; border:3px solid var(--line);
+  background:conic-gradient(var(--rc,var(--pink)) calc(var(--v)*1%), var(--track) 0)}
+.ring>div{width:74px; height:74px; border-radius:50%; background:var(--card); border:3px solid var(--line); display:grid; place-items:center;
+  font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800; font-size:24px}
+.pod.p1 .ring{width:120px; height:120px}.pod.p1 .ring>div{width:86px;height:86px;font-size:28px}
+.stand{margin-top:12px; height:16px; border-radius:10px; border:3px solid var(--line)}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+
+.badge{display:inline-block; padding:2px 10px; border-radius:999px; border:2.5px solid var(--line); font-weight:800; font-size:13px; color:#2B2340; white-space:nowrap}
+.sz{display:inline-block; padding:1px 9px; border-radius:999px; background:var(--chip); border:2px solid var(--line); font-weight:800; font-size:12px}
+
+/* ---------- list ---------- */
+.list{display:grid; gap:12px; margin-top:20px}
+.row{display:grid; grid-template-columns:52px 1fr minmax(120px,240px) 64px; gap:14px; align-items:center; padding:12px 16px; cursor:pointer; transition:transform .12s}
+.row:hover{transform:translateX(4px)}
+.row:focus-visible{outline:3px dashed var(--purple); outline-offset:3px}
+.rk{width:44px; height:44px; border-radius:14px; border:3px solid var(--line); display:grid; place-items:center; font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800; font-size:20px; background:var(--chip)}
+.row .nm{font-weight:800; font-size:17px}
+.row .sub{display:flex; flex-wrap:wrap; gap:6px; margin-top:3px; align-items:center; font-size:13px; color:var(--ink-soft); font-weight:700}
+.bar{height:16px; border-radius:999px; background:var(--track); border:2.5px solid var(--line); overflow:hidden}
+.bar>i{display:block; height:100%; border-radius:999px; transition:width .6s cubic-bezier(.3,1.4,.5,1)}
+.pts{font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800; font-size:22px; text-align:right}
+
+/* ---------- summary chips ---------- */
+.sumgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px}
+.sum{padding:14px 16px; display:flex; align-items:center; gap:12px}
+.sum .big{font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800; font-size:38px; line-height:1}
+.sum .lb{font-weight:800}
+.sum .ic{font-size:30px}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px}
+.tab{border:3px solid var(--line); background:var(--card); border-radius:14px; padding:8px 16px; font-weight:800; box-shadow:3px 3px 0 var(--line)}
+.tab[aria-selected="true"]{background:var(--purple); color:#fff}
+.panel{padding:18px}
+.scen{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px}
+.sc{padding:14px; border-radius:18px; border:3px solid var(--line); background:var(--chip)}
+.sc.cur{background:#FFF1A8; color:#2B2340}
+.sc.cur .tiny{color:#5E5577}
+.sc h3{font-size:18px; font-weight:800}
+.sc ol{margin:10px 0 0; padding-left:22px}
+.sc li{margin:4px 0; font-weight:700}
+.sc li span{float:right; font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800}
+.tiny{font-size:13px; color:var(--ink-soft); font-weight:700}
+
+.wgrid{display:grid; gap:9px}
+.wrow{display:grid; grid-template-columns:30px minmax(150px,220px) 1fr 62px; gap:10px; align-items:center; font-weight:700}
+.wrow .bar{height:14px}
+.wrow .pct{text-align:right; font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800}
+.wrow.off{opacity:.45}
+
+.search{width:100%; border:3px solid var(--line); border-radius:14px; padding:10px 14px; font:inherit; font-weight:700; background:var(--chip); color:var(--ink); margin-bottom:12px}
+.search:focus{outline:3px dashed var(--purple); outline-offset:2px}
+.all{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px; max-height:560px; overflow:auto; padding:4px 6px 8px 2px}
+.mini{display:flex; align-items:center; gap:10px; padding:8px 10px; border:2.5px solid var(--line); border-radius:14px; background:var(--card); cursor:pointer; text-align:left; width:100%}
+.mini:hover{background:var(--chip)}
+.mini .r{font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800; width:30px; flex:none}
+.mini .n{flex:1; font-weight:800; font-size:14px; line-height:1.25}
+.mini .p{font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-weight:800}
+.dot{width:12px; height:12px; border-radius:50%; border:2px solid var(--line); flex:none}
+
+/* ---------- modal ---------- */
+dialog{border:none; padding:0; background:transparent; max-width:min(680px,calc(100vw - 24px)); width:100%; color:var(--ink)}
+dialog::backdrop{background:rgba(29,24,48,.55)}
+.modal{padding:22px; max-height:calc(100vh - 40px); overflow:auto}
+.mh{display:flex; gap:14px; align-items:center}
+.mh .em{font-size:54px; line-height:1}
+.mh h3{font-size:28px; font-weight:800}
+.close{margin-left:auto; align-self:flex-start; width:42px; height:42px; border-radius:50%; border:3px solid var(--line); background:var(--pink); font-weight:800; font-size:20px; box-shadow:3px 3px 0 var(--line); color:#2B2340}
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin:16px 0}
+.fact{border:2.5px solid var(--line); border-radius:14px; padding:8px 10px; background:var(--chip)}
+.fact b{display:block; font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-size:20px}
+.fact span{font-size:13px; font-weight:700; color:var(--ink-soft)}
+.crit{display:grid; gap:7px}
+.crow{display:grid; grid-template-columns:26px minmax(130px,190px) 1fr 34px; gap:8px; align-items:center; font-weight:700; font-size:14px}
+.crow .bar{height:13px}
+.crow.off{opacity:.4}
+.crow b{font-family:"Baloo 2","Nunito",system-ui,sans-serif; text-align:right}
+.note{margin-top:14px; padding:12px 14px; border:2.5px dashed var(--line); border-radius:14px; font-weight:700}
+.note.warn{background:#FFE3EA; color:#2B2340}
+.note h4{margin:0 0 4px; font-family:"Baloo 2","Nunito",system-ui,sans-serif; font-size:17px}
+
+footer{margin-top:40px; font-size:13px; color:var(--ink-soft); font-weight:700; text-align:center}
+.paw{position:fixed; pointer-events:none; font-size:22px; z-index:50; animation:fly 900ms ease-out forwards}
+@keyframes fly{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.4); opacity:0}}
+.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.85)}100%{transform:scale(1)}}
+
+@media (max-width:720px){
+  header.hero{grid-template-columns:1fr; padding:22px 18px}
+  .mascot{position:absolute; right:10px; top:8px; font-size:58px}
+  header.hero h1{padding-right:56px}
+  .podium{grid-template-columns:1fr; gap:14px}
+  .pod.p1{order:-1}
+  .row{grid-template-columns:44px 1fr 56px; gap:10px}
+  .row .bar{grid-column:2 / 4}
+  .row .pts{grid-row:1; grid-column:3}
+  .rk{width:38px; height:38px; font-size:17px}
+  .wrow{grid-template-columns:26px 1fr 54px}
+  .wrow .bar{grid-column:1 / 4; grid-row:2}
+  .crow{grid-template-columns:24px 1fr 30px}
+  .crow .bar{grid-column:1 / 4; grid-row:2}
+  .q{padding:16px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero card">
+    <span class="bone" style="left:56%;top:12%">🦴</span>
+    <span class="bone" style="left:70%;bottom:10%;transform:rotate(30deg)">🐾</span>
+    <span class="bone" style="left:44%;bottom:6%;transform:rotate(-20deg)">🐾</span>
+    <div>
+      <h1>Tìm Bạn <span>Bốn Chân</span></h1>
+      <p>Trả lời 5 câu hỏi nhỏ – công cụ chấm điểm 72 giống chó cảnh tại Việt Nam theo 14 tiêu chí và gợi ý ngay người bạn hợp với bạn nhất!</p>
+      <div class="tags"><span class="tag">🐕 72 giống</span><span class="tag">📋 14 tiêu chí</span><span class="tag">⚡ Kết quả tức thì</span></div>
+    </div>
+    <div class="mascot" aria-hidden="true">🐶</div>
+  </header>
+
+  <section class="sec" aria-labelledby="s1">
+    <div class="sec-title"><div class="num" style="background:var(--pink)">1</div><h2 id="s1">Bạn là ai?<small>Chọn 5 thông tin – kết quả tự cập nhật</small></h2></div>
+    <div class="qgrid" id="questions"></div>
+    <div class="bubble-row"><div class="dog" aria-hidden="true">🐕</div><div class="bubble card" id="bubble" aria-live="polite"></div></div>
+  </section>
+
+  <section class="sec" aria-labelledby="s2">
+    <div class="sec-title"><div class="num" style="background:var(--yellow)">2</div><h2 id="s2">Top 10 bạn bốn chân hợp nhất<small>Bấm vào từng giống để xem điểm chi tiết</small></h2></div>
+    <div class="podium" id="podium"></div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="s3">
+    <div class="sec-title"><div class="num" style="background:var(--teal)">3</div><h2 id="s3">Bức tranh toàn cảnh<small>Phân bổ 72 giống theo mức phù hợp</small></h2></div>
+    <div class="sumgrid" id="summary"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="s4">
+    <div class="sec-title"><div class="num" style="background:var(--sky)">4</div><h2 id="s4">Khám phá thêm<small>So sánh tình huống, trọng số và tra cứu cả 72 giống</small></h2></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="t-scen">🔀 So sánh 4 tình huống</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="t-w">⚖️ Tiêu chí &amp; trọng số</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="t-all">🔎 Tra cứu 72 giống</button>
+    </div>
+    <div class="card panel" id="t-scen" role="tabpanel">
+      <p class="tiny" style="margin:0 0 12px">4 tổ hợp Loại hình ở × Tính cách chủ nuôi. Trẻ nhỏ, kinh nghiệm, thời gian vắng nhà giữ theo lựa chọn hiện tại. Ô vàng là tình huống bạn đang chọn.</p>
+      <div class="scen" id="scen"></div>
+    </div>
+    <div class="card panel" id="t-w" role="tabpanel" hidden>
+      <p class="tiny" style="margin:0 0 12px">Trọng số áp dụng = trọng số gốc sau khi điều chỉnh theo đầu vào (VD: không có trẻ nhỏ → tiêu chí Thân thiện trẻ nhỏ = 0%), quy về tổng 100%. Tổng điểm = Σ(điểm × trọng số) ÷ Σ trọng số ÷ 5 × 100.</p>
+      <div class="wgrid" id="weights"></div>
+    </div>
+    <div class="card panel" id="t-all" role="tabpanel" hidden>
+      <input class="search" id="q" type="search" placeholder="Gõ tên giống chó… (VD: Corgi, Phú Quốc, Husky)" aria-label="Tìm giống chó">
+      <div class="all" id="all"></div>
+    </div>
+  </section>
+
+  <footer id="src"></footer>
+</div>
+
+<dialog id="dlg"><div class="card modal" id="dlgBody"></div></dialog>
+
+<script>
+const BREEDS = [{"id":1,"n":"Poodle (Toy/Mini)","sz":"Nhỏ","wmin":3,"wmax":8,"iq":5,"tr":5,"bk":4,"fp":5,"fk":4,"lmin":12,"lmax":15,"sh":1,"en":3,"hr":2,"dis":"Trật khớp gối, teo võng mạc tiến triển (PRA), động kinh","heat":4,"al":2,"nov":4,"note":"Ít rụng lông; cắt tỉa lông 4–6 tuần/lần"},{"id":2,"n":"Chihuahua","sz":"Nhỏ","wmin":1.5,"wmax":3,"iq":2,"tr":3,"bk":5,"fp":3,"fk":2,"lmin":14,"lmax":16,"sh":2,"en":2,"hr":3,"dis":"Trật khớp gối, bệnh van tim, hạ đường huyết, bệnh răng","heat":4,"al":2,"nov":3,"note":"Rất nhỏ, dễ bị thương; hay sủa"},{"id":3,"n":"Phốc sóc (Pomeranian)","sz":"Nhỏ","wmin":1.5,"wmax":3.5,"iq":4,"tr":3,"bk":5,"fp":4,"fk":2,"lmin":12,"lmax":16,"sh":3,"en":3,"hr":3,"dis":"Xẹp khí quản, trật khớp gối, rụng lông Alopecia X","heat":2,"al":2,"nov":3,"note":"Lông dày, chải thường xuyên, giữ mát"},{"id":4,"n":"Phốc hươu (Min Pin)","sz":"Nhỏ","wmin":4,"wmax":5,"iq":3,"tr":3,"bk":5,"fp":3,"fk":3,"lmin":12,"lmax":16,"sh":2,"en":4,"hr":2,"dis":"Trật khớp gối, hoại tử chỏm xương đùi","heat":4,"al":3,"nov":2,"note":"Hiếu động; lông ngắn dễ chăm"},{"id":5,"n":"Pug","sz":"Nhỏ","wmin":6,"wmax":8,"iq":2,"tr":3,"bk":1,"fp":5,"fk":5,"lmin":12,"lmax":15,"sh":4,"en":2,"hr":5,"dis":"Hội chứng khó thở mặt ngắn (BOAS), bệnh mắt, béo phì, viêm da nếp gấp","heat":1,"al":2,"nov":5,"note":"Dễ sốc nhiệt; giữ phòng mát"},{"id":6,"n":"Shih Tzu","sz":"Nhỏ","wmin":4,"wmax":7,"iq":1,"tr":3,"bk":3,"fp":5,"fk":5,"lmin":10,"lmax":16,"sh":1,"en":2,"hr":3,"dis":"Bệnh mắt, viêm tai, khó thở do mặt ngắn","heat":2,"al":3,"nov":5,"note":"Chải lông, vệ sinh mắt hằng ngày"},{"id":7,"n":"Maltese","sz":"Nhỏ","wmin":2,"wmax":4,"iq":2,"tr":3,"bk":3,"fp":5,"fk":3,"lmin":12,"lmax":15,"sh":1,"en":2,"hr":2,"dis":"Chảy nước mắt, trật khớp gối, bệnh răng miệng","heat":3,"al":2,"nov":4,"note":"Ít rụng lông; chải lông hằng ngày"},{"id":8,"n":"Yorkshire Terrier","sz":"Nhỏ","wmin":2,"wmax":3.5,"iq":3,"tr":4,"bk":4,"fp":5,"fk":3,"lmin":13,"lmax":16,"sh":1,"en":3,"hr":3,"dis":"Xẹp khí quản, trật khớp gối, bệnh răng, shunt gan","heat":3,"al":2,"nov":3,"note":"Nhỏ gọn, ít rụng lông"},{"id":9,"n":"Bichon Frisé","sz":"Nhỏ","wmin":5,"wmax":8,"iq":3,"tr":4,"bk":3,"fp":5,"fk":5,"lmin":14,"lmax":15,"sh":1,"en":3,"hr":2,"dis":"Dị ứng da, sỏi bàng quang, trật khớp gối","heat":3,"al":2,"nov":4,"note":"Vui vẻ; cắt tỉa lông định kỳ"},{"id":10,"n":"Bull Pháp (French Bulldog)","sz":"Nhỏ","wmin":8,"wmax":13,"iq":2,"tr":3,"bk":1,"fp":5,"fk":5,"lmin":10,"lmax":12,"sh":3,"en":2,"hr":5,"dis":"BOAS khó thở, thoát vị đĩa đệm (IVDD), dị ứng da","heat":1,"al":2,"nov":4,"note":"Ít sủa; rất kỵ nóng"},{"id":11,"n":"Lạp xưởng (Dachshund)","sz":"Nhỏ","wmin":5,"wmax":12,"iq":3,"tr":3,"bk":5,"fp":4,"fk":3,"lmin":12,"lmax":16,"sh":2,"en":3,"hr":4,"dis":"Thoát vị đĩa đệm (IVDD), béo phì","heat":3,"al":3,"nov":3,"note":"Hạn chế nhảy, leo cầu thang"},{"id":12,"n":"Cavalier King Charles","sz":"Nhỏ","wmin":6,"wmax":8,"iq":3,"tr":4,"bk":2,"fp":5,"fk":5,"lmin":12,"lmax":15,"sh":3,"en":3,"hr":5,"dis":"Bệnh van hai lá (tim), Syringomyelia","heat":3,"al":1,"nov":5,"note":"Hiền, tình cảm; khám tim định kỳ"},{"id":13,"n":"Bắc Kinh (Pekingese)","sz":"Nhỏ","wmin":3,"wmax":6,"iq":1,"tr":2,"bk":3,"fp":3,"fk":2,"lmin":12,"lmax":14,"sh":3,"en":1,"hr":4,"dis":"BOAS khó thở, bệnh mắt, thoát vị đĩa đệm","heat":1,"al":3,"nov":3,"note":"Mặt ngắn, lông dày, rất kỵ nóng"},{"id":14,"n":"Boston Terrier","sz":"Nhỏ","wmin":5,"wmax":11,"iq":3,"tr":4,"bk":2,"fp":5,"fk":5,"lmin":11,"lmax":13,"sh":2,"en":3,"hr":4,"dis":"BOAS khó thở, loét giác mạc, trật khớp gối","heat":1,"al":3,"nov":5,"note":"Vui vẻ, hợp chung cư; kỵ nóng"},{"id":15,"n":"Chinese Crested (Mào Trung Hoa)","sz":"Nhỏ","wmin":4,"wmax":6,"iq":3,"tr":3,"bk":2,"fp":5,"fk":3,"lmin":13,"lmax":18,"sh":1,"en":3,"hr":3,"dis":"Bệnh răng, dị ứng da/cháy nắng, PRA, trật khớp gối","heat":3,"al":1,"nov":4,"note":"Ít lông; cần chống nắng, giữ ấm"},{"id":16,"n":"Italian Greyhound","sz":"Nhỏ","wmin":3.5,"wmax":6.5,"iq":3,"tr":3,"bk":3,"fp":5,"fk":3,"lmin":14,"lmax":15,"sh":2,"en":3,"hr":3,"dis":"Gãy xương chân, bệnh răng, động kinh","heat":4,"al":2,"nov":4,"note":"Mảnh mai, dễ gãy chân"},{"id":17,"n":"Lhasa Apso","sz":"Nhỏ","wmin":5,"wmax":8,"iq":2,"tr":3,"bk":4,"fp":3,"fk":3,"lmin":12,"lmax":15,"sh":1,"en":2,"hr":2,"dis":"Bệnh mắt, bệnh thận di truyền, dị ứng da","heat":2,"al":4,"nov":3,"note":"Độc lập; cần chải lông dài"},{"id":18,"n":"Nhật lông xù (Japanese Spitz)","sz":"Nhỏ","wmin":5,"wmax":10,"iq":3,"tr":4,"bk":3,"fp":5,"fk":5,"lmin":12,"lmax":14,"sh":4,"en":3,"hr":2,"dis":"Trật khớp gối, chảy nước mắt","heat":2,"al":2,"nov":4,"note":"Lông trắng dày; cần giữ mát"},{"id":19,"n":"Papillon","sz":"Nhỏ","wmin":2,"wmax":5,"iq":5,"tr":5,"bk":3,"fp":5,"fk":3,"lmin":14,"lmax":16,"sh":3,"en":4,"hr":2,"dis":"Trật khớp gối, bệnh răng, PRA","heat":3,"al":2,"nov":4,"note":"Nhỏ, thông minh, dễ dạy"},{"id":20,"n":"Shetland Sheepdog (Collie lùn)","sz":"Nhỏ","wmin":6,"wmax":12,"iq":5,"tr":5,"bk":5,"fp":5,"fk":5,"lmin":12,"lmax":14,"sh":4,"en":4,"hr":3,"dis":"Bệnh mắt Collie (CEA), suy giáp, nhạy thuốc (MDR1)","heat":2,"al":2,"nov":4,"note":"Rất thông minh; hay sủa, lông dày"},{"id":21,"n":"Schnauzer tí hon (Zwergschnauzer)","sz":"Nhỏ","wmin":5,"wmax":9,"iq":4,"tr":5,"bk":5,"fp":5,"fk":5,"lmin":12,"lmax":15,"sh":1,"en":4,"hr":3,"dis":"Viêm tụy, sỏi bàng quang, bệnh mắt, mỡ máu cao","heat":3,"al":2,"nov":4,"note":"Ít rụng lông; hay sủa, cắt tỉa định kỳ"},{"id":22,"n":"Corgi","sz":"Vừa","wmin":10,"wmax":14,"iq":4,"tr":4,"bk":4,"fp":4,"fk":3,"lmin":12,"lmax":13,"sh":4,"en":4,"hr":3,"dis":"Thoái hóa tủy sống (DM), loạn sản xương hông, béo phì","heat":2,"al":3,"nov":4,"note":"Rụng lông nhiều; kiểm soát cân nặng"},{"id":23,"n":"Shiba Inu","sz":"Vừa","wmin":8,"wmax":11,"iq":3,"tr":2,"bk":2,"fp":3,"fk":3,"lmin":13,"lmax":16,"sh":4,"en":3,"hr":2,"dis":"Dị ứng da, trật khớp gối, tăng nhãn áp","heat":3,"al":4,"nov":2,"note":"Độc lập, sạch sẽ; rụng lông theo mùa"},{"id":24,"n":"Beagle","sz":"Vừa","wmin":9,"wmax":11,"iq":2,"tr":3,"bk":5,"fp":4,"fk":5,"lmin":10,"lmax":15,"sh":3,"en":4,"hr":3,"dis":"Động kinh, suy giáp, béo phì, viêm tai","heat":3,"al":2,"nov":3,"note":"Thích đánh hơi; hay sủa, hú"},{"id":25,"n":"Cocker Spaniel","sz":"Vừa","wmin":9,"wmax":14,"iq":4,"tr":4,"bk":3,"fp":4,"fk":5,"lmin":10,"lmax":14,"sh":3,"en":3,"hr":4,"dis":"Viêm tai, bệnh mắt (cườm, tăng nhãn áp), dị ứng da","heat":3,"al":2,"nov":4,"note":"Vệ sinh tai thường xuyên"},{"id":26,"n":"Phú Quốc","sz":"Vừa","wmin":12,"wmax":20,"iq":4,"tr":4,"bk":3,"fp":3,"fk":3,"lmin":12,"lmax":15,"sh":1,"en":5,"hr":1,"dis":"Ít bệnh di truyền; chủ yếu ký sinh trùng, bệnh da","heat":5,"al":3,"nov":3,"note":"Chó Việt; lông ngắn, rất nhanh nhẹn"},{"id":27,"n":"Bắc Hà","sz":"Vừa","wmin":15,"wmax":25,"iq":4,"tr":4,"bk":3,"fp":4,"fk":4,"lmin":12,"lmax":15,"sh":4,"en":4,"hr":1,"dis":"Ít bệnh di truyền; nấm da, ve rận nếu không chăm lông","heat":3,"al":3,"nov":4,"note":"Chó Việt; lông dài, trung thành"},{"id":28,"n":"H'Mông cộc đuôi","sz":"Vừa","wmin":15,"wmax":22,"iq":4,"tr":4,"bk":3,"fp":3,"fk":3,"lmin":12,"lmax":15,"sh":3,"en":5,"hr":1,"dis":"Ít bệnh di truyền; chủ yếu ký sinh trùng","heat":4,"al":3,"nov":3,"note":"Chó Việt; bền sức, cần vận động nhiều"},{"id":29,"n":"Chó ta (chó cỏ)","sz":"Vừa","wmin":10,"wmax":20,"iq":3,"tr":3,"bk":3,"fp":4,"fk":4,"lmin":12,"lmax":16,"sh":2,"en":3,"hr":1,"dis":"Sức đề kháng tốt; Care, Parvo nếu không tiêm phòng","heat":5,"al":4,"nov":5,"note":"Khỏe, dễ nuôi, hợp khí hậu Việt Nam"},{"id":30,"n":"Border Collie","sz":"Vừa","wmin":14,"wmax":20,"iq":5,"tr":5,"bk":4,"fp":4,"fk":3,"lmin":12,"lmax":15,"sh":4,"en":5,"hr":2,"dis":"Loạn sản xương hông, dị tật mắt Collie (CEA), động kinh","heat":3,"al":2,"nov":2,"note":"Thông minh nhất; cần việc để làm"},{"id":31,"n":"Husky","sz":"Vừa","wmin":16,"wmax":27,"iq":3,"tr":2,"bk":5,"fp":5,"fk":5,"lmin":12,"lmax":14,"sh":5,"en":5,"hr":2,"dis":"Bệnh mắt (cườm, PRA), sốc nhiệt, suy giáp","heat":1,"al":2,"nov":2,"note":"Chịu nóng rất kém; hay hú"},{"id":32,"n":"Samoyed","sz":"Vừa","wmin":16,"wmax":30,"iq":3,"tr":3,"bk":5,"fp":5,"fk":5,"lmin":12,"lmax":14,"sh":5,"en":4,"hr":3,"dis":"Loạn sản xương hông, bệnh thận di truyền, đái tháo đường","heat":1,"al":2,"nov":2,"note":"Lông dày, cần điều hòa"},{"id":33,"n":"Chow Chow","sz":"Vừa","wmin":20,"wmax":32,"iq":1,"tr":1,"bk":1,"fp":3,"fk":2,"lmin":8,"lmax":12,"sh":4,"en":2,"hr":4,"dis":"Quặm mi (entropion), loạn sản xương hông, dị ứng da","heat":1,"al":4,"nov":2,"note":"Độc lập, ít vận động; kỵ nóng"},{"id":34,"n":"Bulldog Anh","sz":"Vừa","wmin":18,"wmax":25,"iq":1,"tr":2,"bk":2,"fp":4,"fk":3,"lmin":8,"lmax":10,"sh":3,"en":1,"hr":5,"dis":"BOAS khó thở, loạn sản xương hông, viêm da nếp gấp","heat":1,"al":3,"nov":4,"note":"Lười vận động; rất kỵ nóng"},{"id":35,"n":"Australian Shepherd","sz":"Vừa","wmin":16,"wmax":32,"iq":3,"tr":5,"bk":3,"fp":3,"fk":5,"lmin":12,"lmax":15,"sh":3,"en":5,"hr":3,"dis":"Loạn sản xương hông, bệnh mắt Collie, động kinh, nhạy thuốc (MDR1)","heat":3,"al":1,"nov":2,"note":"Rất năng động; cần vận động và việc để làm"},{"id":36,"n":"Basenji","sz":"Vừa","wmin":9,"wmax":11,"iq":1,"tr":2,"bk":1,"fp":3,"fk":3,"lmin":13,"lmax":14,"sh":2,"en":4,"hr":3,"dis":"Hội chứng Fanconi (thận), teo võng mạc (PRA), suy giáp","heat":5,"al":2,"nov":1,"note":"Hầu như không sủa; độc lập, dễ đi lạc"},{"id":37,"n":"Basset Hound","sz":"Vừa","wmin":20,"wmax":29,"iq":1,"tr":2,"bk":4,"fp":3,"fk":5,"lmin":12,"lmax":13,"sh":2,"en":2,"hr":4,"dis":"Bệnh cột sống, viêm tai, tăng nhãn áp, béo phì","heat":3,"al":3,"nov":4,"note":"Hiền, chậm chạp; tai dài cần vệ sinh; hay hú"},{"id":38,"n":"Becgie Hà Lan (Dutch Shepherd)","sz":"Vừa","wmin":20,"wmax":30,"iq":4,"tr":5,"bk":3,"fp":3,"fk":4,"lmin":11,"lmax":14,"sh":2,"en":5,"hr":2,"dis":"Ít bệnh; loạn sản xương hông, bệnh mắt","heat":4,"al":2,"nov":2,"note":"Chó nghiệp vụ; cần vận động cường độ cao"},{"id":39,"n":"German Pinscher","sz":"Vừa","wmin":11,"wmax":20,"iq":3,"tr":4,"bk":4,"fp":4,"fk":3,"lmin":12,"lmax":14,"sh":2,"en":5,"hr":2,"dis":"Loạn sản xương hông, bệnh mắt, Von Willebrand","heat":4,"al":2,"nov":2,"note":"Nhanh nhẹn, cảnh giác; lông ngắn dễ chăm"},{"id":40,"n":"Icelandic Sheepdog","sz":"Vừa","wmin":9,"wmax":14,"iq":3,"tr":4,"bk":5,"fp":5,"fk":5,"lmin":12,"lmax":14,"sh":4,"en":4,"hr":2,"dis":"Loạn sản xương hông, trật khớp gối, đục thủy tinh thể","heat":2,"al":2,"nov":3,"note":"Thân thiện, hay sủa; lông dày"},{"id":41,"n":"Nova Scotia Duck Tolling Retriever","sz":"Vừa","wmin":17,"wmax":23,"iq":4,"tr":5,"bk":4,"fp":4,"fk":5,"lmin":12,"lmax":14,"sh":3,"en":5,"hr":3,"dis":"Bệnh tự miễn, teo võng mạc (PRA), loạn sản xương hông","heat":2,"al":2,"nov":3,"note":"Rất năng động; lông dày"},{"id":42,"n":"Pharaoh Hound","sz":"Vừa","wmin":20,"wmax":25,"iq":3,"tr":3,"bk":3,"fp":3,"fk":5,"lmin":12,"lmax":14,"sh":1,"en":5,"hr":1,"dis":"Ít bệnh; nhạy thuốc gây mê","heat":5,"al":3,"nov":3,"note":"Lông ngắn, chịu nóng tốt; chạy rất nhanh"},{"id":43,"n":"Pitbull","sz":"Vừa","wmin":14,"wmax":30,"iq":3,"tr":3,"bk":2,"fp":4,"fk":3,"lmin":12,"lmax":14,"sh":2,"en":4,"hr":3,"dis":"Loạn sản xương hông, dị ứng da, suy giáp","heat":4,"al":2,"nov":2,"note":"Cơ bắp, khỏe; cần chủ có kinh nghiệm"},{"id":44,"n":"Xoáy Thái (Thai Ridgeback)","sz":"Vừa","wmin":16,"wmax":34,"iq":3,"tr":2,"bk":3,"fp":2,"fk":3,"lmin":12,"lmax":13,"sh":2,"en":4,"hr":2,"dis":"Xoang da lưng (dermoid sinus); ít bệnh khác","heat":5,"al":4,"nov":1,"note":"Chịu nóng tốt; độc lập, cảnh giác người lạ"},{"id":45,"n":"Golden Retriever","sz":"Lớn","wmin":25,"wmax":34,"iq":5,"tr":5,"bk":1,"fp":5,"fk":5,"lmin":10,"lmax":12,"sh":4,"en":4,"hr":4,"dis":"Ung thư, loạn sản xương hông/khuỷu, bệnh tim","heat":2,"al":2,"nov":5,"note":"Hiền, rất hợp gia đình có trẻ nhỏ"},{"id":46,"n":"Labrador Retriever","sz":"Lớn","wmin":25,"wmax":36,"iq":5,"tr":5,"bk":3,"fp":5,"fk":5,"lmin":10,"lmax":12,"sh":4,"en":5,"hr":3,"dis":"Loạn sản xương hông/khuỷu, béo phì, PRA","heat":3,"al":2,"nov":5,"note":"Dễ dạy; dễ tăng cân nếu ít vận động"},{"id":47,"n":"Alaska Malamute","sz":"Lớn","wmin":34,"wmax":39,"iq":3,"tr":2,"bk":3,"fp":4,"fk":3,"lmin":10,"lmax":14,"sh":5,"en":4,"hr":3,"dis":"Loạn sản xương hông, suy giáp, sốc nhiệt","heat":1,"al":2,"nov":1,"note":"Rất to, lông dày, cần điều hòa"},{"id":48,"n":"Becgie Đức (German Shepherd)","sz":"Lớn","wmin":22,"wmax":40,"iq":5,"tr":5,"bk":3,"fp":3,"fk":4,"lmin":9,"lmax":13,"sh":4,"en":5,"hr":4,"dis":"Loạn sản xương hông/khuỷu, thoái hóa tủy sống, xoắn dạ dày","heat":3,"al":2,"nov":3,"note":"Giữ nhà tốt; cần huấn luyện sớm"},{"id":49,"n":"Belgian Malinois (Becgie Bỉ)","sz":"Lớn","wmin":20,"wmax":30,"iq":4,"tr":5,"bk":3,"fp":3,"fk":3,"lmin":14,"lmax":16,"sh":3,"en":5,"hr":2,"dis":"Loạn sản xương hông/khuỷu, teo võng mạc (PRA), động kinh","heat":3,"al":1,"nov":1,"note":"Chó nghiệp vụ; cần chủ có kinh nghiệm, vận động cường độ cao"},{"id":50,"n":"Rottweiler","sz":"Lớn","wmin":35,"wmax":60,"iq":5,"tr":4,"bk":1,"fp":3,"fk":3,"lmin":9,"lmax":10,"sh":3,"en":4,"hr":4,"dis":"Loạn sản xương hông, ung thư xương, bệnh tim","heat":3,"al":3,"nov":2,"note":"Bảo vệ tốt; cần chủ có kinh nghiệm"},{"id":51,"n":"Doberman","sz":"Lớn","wmin":27,"wmax":45,"iq":5,"tr":5,"bk":3,"fp":4,"fk":4,"lmin":10,"lmax":12,"sh":2,"en":5,"hr":4,"dis":"Bệnh cơ tim giãn (DCM), Von Willebrand, xoắn dạ dày","heat":4,"al":2,"nov":2,"note":"Nhanh nhẹn, giữ nhà; lông ngắn dễ chăm"},{"id":52,"n":"Afghan Hound","sz":"Lớn","wmin":23,"wmax":27,"iq":1,"tr":1,"bk":3,"fp":3,"fk":3,"lmin":12,"lmax":18,"sh":1,"en":4,"hr":3,"dis":"Loạn sản xương hông, đục thủy tinh thể, suy giáp","heat":2,"al":3,"nov":1,"note":"Lông dài cần chải kỹ; hay chạy đuổi"},{"id":53,"n":"Akita Inu","sz":"Lớn","wmin":30,"wmax":40,"iq":3,"tr":3,"bk":2,"fp":3,"fk":3,"lmin":10,"lmax":14,"sh":4,"en":4,"hr":3,"dis":"Loạn sản xương hông, suy giáp, bệnh tự miễn, xoắn dạ dày","heat":2,"al":4,"nov":1,"note":"Độc lập, trung thành; dễ gây gổ với chó khác"},{"id":54,"n":"Alabai (Chăn cừu Trung Á)","sz":"Lớn","wmin":40,"wmax":65,"iq":3,"tr":2,"bk":3,"fp":2,"fk":3,"lmin":12,"lmax":15,"sh":3,"en":3,"hr":2,"dis":"Loạn sản xương hông/khuỷu, béo phì","heat":3,"al":4,"nov":1,"note":"Chó bảo vệ cỡ rất lớn; cần chủ có kinh nghiệm"},{"id":55,"n":"American Bully","sz":"Lớn","wmin":20,"wmax":35,"iq":2,"tr":3,"bk":2,"fp":5,"fk":4,"lmin":10,"lmax":13,"sh":2,"en":3,"hr":4,"dis":"Loạn sản xương hông, khó thở, dị ứng da, bệnh tim","heat":2,"al":3,"nov":3,"note":"Thân thiện, cơ bắp; dễ sốc nhiệt"},{"id":56,"n":"Boxer","sz":"Lớn","wmin":25,"wmax":32,"iq":3,"tr":4,"bk":3,"fp":4,"fk":5,"lmin":10,"lmax":12,"sh":2,"en":4,"hr":5,"dis":"Ung thư, bệnh cơ tim (ARVC), loạn sản xương hông","heat":2,"al":2,"nov":3,"note":"Năng động, thân thiện; mũi ngắn kỵ nóng"},{"id":57,"n":"Bull Terrier","sz":"Lớn","wmin":23,"wmax":32,"iq":2,"tr":3,"bk":3,"fp":4,"fk":3,"lmin":12,"lmax":13,"sh":3,"en":4,"hr":3,"dis":"Điếc bẩm sinh, bệnh thận, dị ứng da, bệnh tim","heat":3,"al":2,"nov":2,"note":"Bướng, cần huấn luyện sớm"},{"id":58,"n":"Caucasian Shepherd (Ngao Nga)","sz":"Lớn","wmin":45,"wmax":70,"iq":3,"tr":2,"bk":4,"fp":2,"fk":3,"lmin":10,"lmax":12,"sh":4,"en":3,"hr":3,"dis":"Loạn sản xương hông/khuỷu, béo phì","heat":1,"al":4,"nov":1,"note":"Chó bảo vệ cỡ rất lớn, lông dày kỵ nóng"},{"id":59,"n":"Dalmatian","sz":"Lớn","wmin":20,"wmax":32,"iq":3,"tr":4,"bk":3,"fp":4,"fk":3,"lmin":11,"lmax":13,"sh":4,"en":5,"hr":4,"dis":"Điếc bẩm sinh, sỏi tiết niệu (urat), dị ứng da","heat":4,"al":2,"nov":2,"note":"Rất năng động; rụng lông quanh năm"},{"id":60,"n":"Great Dane","sz":"Lớn","wmin":50,"wmax":80,"iq":3,"tr":3,"bk":3,"fp":5,"fk":3,"lmin":7,"lmax":10,"sh":3,"en":3,"hr":5,"dis":"Xoắn dạ dày, bệnh cơ tim giãn, ung thư xương","heat":3,"al":3,"nov":3,"note":"Khổng lồ, hiền; tuổi thọ ngắn"},{"id":61,"n":"Irish Setter","sz":"Lớn","wmin":25,"wmax":32,"iq":3,"tr":4,"bk":3,"fp":5,"fk":5,"lmin":12,"lmax":15,"sh":3,"en":5,"hr":3,"dis":"Xoắn dạ dày, loạn sản xương hông, suy giáp, PRA","heat":3,"al":2,"nov":3,"note":"Rất năng động, vui vẻ"},{"id":62,"n":"Irish Wolfhound","sz":"Lớn","wmin":48,"wmax":68,"iq":3,"tr":3,"bk":2,"fp":5,"fk":4,"lmin":6,"lmax":8,"sh":3,"en":3,"hr":5,"dis":"Bệnh cơ tim giãn, xoắn dạ dày, ung thư xương","heat":2,"al":3,"nov":3,"note":"Khổng lồ, hiền; tuổi thọ rất ngắn"},{"id":63,"n":"Leonberger","sz":"Lớn","wmin":45,"wmax":70,"iq":3,"tr":4,"bk":2,"fp":5,"fk":5,"lmin":7,"lmax":9,"sh":5,"en":3,"hr":4,"dis":"Loạn sản xương hông, xoắn dạ dày, ung thư, bệnh thần kinh","heat":1,"al":2,"nov":3,"note":"Khổng lồ, hiền; lông dày rất kỵ nóng"},{"id":64,"n":"Newfoundland","sz":"Lớn","wmin":45,"wmax":70,"iq":3,"tr":4,"bk":1,"fp":5,"fk":5,"lmin":9,"lmax":10,"sh":3,"en":3,"hr":4,"dis":"Loạn sản xương hông/khuỷu, hẹp van động mạch chủ, cystin niệu","heat":1,"al":3,"nov":4,"note":"Hiền như gấu; lông dày rất kỵ nóng"},{"id":65,"n":"Ngao Brazil (Fila Brasileiro)","sz":"Lớn","wmin":40,"wmax":60,"iq":2,"tr":2,"bk":3,"fp":1,"fk":3,"lmin":9,"lmax":11,"sh":2,"en":3,"hr":3,"dis":"Loạn sản xương hông, xoắn dạ dày","heat":4,"al":3,"nov":1,"note":"Rất dữ với người lạ; cần chủ có kinh nghiệm"},{"id":66,"n":"Ngao Dogo Argentino","sz":"Lớn","wmin":35,"wmax":45,"iq":3,"tr":3,"bk":2,"fp":3,"fk":3,"lmin":10,"lmax":12,"sh":2,"en":4,"hr":3,"dis":"Điếc bẩm sinh, loạn sản xương hông","heat":4,"al":2,"nov":1,"note":"Chó săn mạnh; cần chủ có kinh nghiệm"},{"id":67,"n":"Ngao Neapolitan","sz":"Lớn","wmin":50,"wmax":70,"iq":2,"tr":1,"bk":1,"fp":3,"fk":3,"lmin":7,"lmax":9,"sh":3,"en":1,"hr":5,"dis":"Loạn sản xương hông, bệnh cơ tim, sa tuyến mí mắt, viêm da nếp gấp","heat":1,"al":4,"nov":1,"note":"Khổng lồ, nhiều nếp da; chảy dãi"},{"id":68,"n":"Ngao Pháp Bordeaux","sz":"Lớn","wmin":45,"wmax":65,"iq":2,"tr":2,"bk":1,"fp":4,"fk":3,"lmin":5,"lmax":8,"sh":2,"en":2,"hr":5,"dis":"Bệnh tim, loạn sản xương hông, xoắn dạ dày, khó thở","heat":1,"al":3,"nov":2,"note":"Tuổi thọ rất ngắn; kỵ nóng"},{"id":69,"n":"Ngao Tây Tạng","sz":"Lớn","wmin":35,"wmax":70,"iq":2,"tr":1,"bk":3,"fp":2,"fk":3,"lmin":10,"lmax":12,"sh":3,"en":3,"hr":2,"dis":"Loạn sản xương hông, suy giáp","heat":1,"al":4,"nov":1,"note":"Lông dày, độc lập; cần chủ có kinh nghiệm"},{"id":70,"n":"Ngao Ý Cane Corso","sz":"Lớn","wmin":40,"wmax":50,"iq":3,"tr":4,"bk":3,"fp":3,"fk":3,"lmin":9,"lmax":12,"sh":2,"en":4,"hr":4,"dis":"Loạn sản xương hông, xoắn dạ dày, bệnh mí mắt","heat":3,"al":3,"nov":1,"note":"Bảo vệ mạnh; cần huấn luyện bài bản"},{"id":71,"n":"Saint Bernard","sz":"Lớn","wmin":55,"wmax":80,"iq":2,"tr":3,"bk":2,"fp":5,"fk":5,"lmin":8,"lmax":10,"sh":3,"en":2,"hr":5,"dis":"Loạn sản xương hông/khuỷu, xoắn dạ dày, bệnh tim","heat":1,"al":3,"nov":3,"note":"Khổng lồ, hiền; rất kỵ nóng, chảy dãi"},{"id":72,"n":"Xoáy Nam Phi (Rhodesian Ridgeback)","sz":"Lớn","wmin":32,"wmax":39,"iq":3,"tr":2,"bk":2,"fp":3,"fk":4,"lmin":10,"lmax":12,"sh":2,"en":4,"hr":3,"dis":"Xoang da lưng (dermoid sinus), loạn sản xương hông, suy giáp","heat":5,"al":3,"nov":2,"note":"Chịu nóng tốt; độc lập, bướng"}];
+const CRIT=[
+ {k:'kt',n:'Kích thước',w:.05,e:'📏'},{k:'cn',n:'Cân nặng',w:.025,e:'⚖️'},
+ {k:'iq',n:'Trí thông minh',w:.15,e:'🧠'},{k:'tr',n:'Khả năng huấn luyện',w:.10,e:'🎓'},
+ {k:'bk',n:'Mức độ sủa',w:.10,e:'🔊'},{k:'fp',n:'Thân thiện con người',w:.10,e:'🤗'},
+ {k:'fk',n:'Thân thiện trẻ nhỏ',w:.025,e:'🧒'},{k:'life',n:'Tuổi thọ',w:.05,e:'⏳'},
+ {k:'shed',n:'Rụng lông',w:.05,e:'🧹'},{k:'en',n:'Mức độ vận động',w:.15,e:'🏃'},
+ {k:'hr',n:'Bệnh thường gặp',w:.025,e:'🩺'},{k:'heat',n:'Chịu nóng',w:.05,e:'☀️'},
+ {k:'al',n:'Chịu ở một mình',w:.025,e:'🏠'},{k:'nov',n:'Phù hợp người mới nuôi',w:.10,e:'🌱'}];
+const T={
+ kt:{'Nhỏ':[5,4],'Vừa':[3,5],'Lớn':[1,5]},
+ cnB:[0,5,10,20,30], cn:[[2,3,5,5,4],[5,5,4,2,1]],
+ bk:[[5,5,3,2,1],[5,5,4,4,3]],
+ lifeB:[0,10,12,14], life:[2,3,4,5],
+ en:[[1,2,4,5,5],[5,5,3,1,0]],
+ al:[[4,5,5,5,5],[1,2,4,5,5],[0,1,3,4,5]],
+ nov:[[0,1,3,4,5],[4,4,5,5,5]]};
+const band=(B,x)=>{let i=0;for(let j=0;j<B.length;j++) if(x>=B[j]) i=j;return i;};
+const r1=x=>Math.round(x*10+1e-9)/10;
+function weights(inp){return CRIT.map(c=>c.k==='fk'?c.w*(inp.kids?1:0):c.w);}
+function level(t){return t>=80?'Rất phù hợp':t>=65?'Phù hợp':t>=50?'Cân nhắc':'Không khuyến nghị';}
+// inp: home 0=Chung cư 1=Nhà riêng; act 0=Ưa vận động 1=Nhẹ nhàng; kids bool; exp 0=Lần đầu 1=Đã có; away 0/1/2
+function score(b,inp){
+ const w=(b.wmin+b.wmax)/2, L=(b.lmin+b.lmax)/2;
+ const s={kt:T.kt[b.sz][inp.home],cn:T.cn[inp.act][band(T.cnB,w)],iq:b.iq,tr:b.tr,bk:T.bk[inp.home][b.bk-1],
+  fp:b.fp,fk:b.fk,life:T.life[band(T.lifeB,L)],shed:6-b.sh,en:T.en[inp.act][b.en-1],hr:6-b.hr,heat:b.heat,
+  al:T.al[inp.away][b.al-1],nov:T.nov[inp.exp][b.nov-1]};
+ const W=weights(inp); let num=0,den=0;
+ CRIT.forEach((c,i)=>{num+=s[c.k]*W[i];den+=W[i];});
+ const tot=r1(num/den/5*100);
+ const notes=[];
+ if(inp.home===0&&b.sz==='Lớn')notes.push('Cỡ lớn, hạn chế nuôi chung cư.');
+ if(inp.home===0&&b.bk>=4)notes.push('Hay sủa, dễ ảnh hưởng hàng xóm.');
+ if(inp.act===1&&b.en>=4)notes.push('Cần vận động nhiều mỗi ngày.');
+ if(inp.kids&&b.fk<=2)notes.push('Cần giám sát khi có trẻ nhỏ.');
+ if(inp.exp===0&&b.nov<=2)notes.push('Không khuyến nghị cho người mới nuôi.');
+ if(inp.away===2&&b.al<=2)notes.push('Chịu ở một mình kém, dễ phá phách khi vắng chủ.');
+ if(b.tr<=2)notes.push('Khó huấn luyện, cần kiên trì.');
+ if(b.sh>=5)notes.push('Rụng lông rất nhiều.');
+ if(b.hr>=4)notes.push('Nguy cơ bệnh cao, cần khám định kỳ.');
+ if(b.heat<=2)notes.push('Chịu nóng kém, cần điều hòa.');
+ return {b,s,tot,lvl:level(tot),notes,wAvg:w,lAvg:L};
+}
+function rankAll(inp){return BREEDS.map(b=>score(b,inp)).sort((a,c)=>c.tot-a.tot||a.b.id-c.b.id);}
+
+const Q=[
+ {k:'home',t:'Loại hình ở',e:'🏡',c:'var(--yellow)',o:['🏢 Chung cư','🌳 Nhà riêng có sân vườn']},
+ {k:'act',t:'Tính cách chủ nuôi',e:'⚡',c:'var(--teal)',o:['🏃 Ưa vận động','🧘 Vận động nhẹ nhàng']},
+ {k:'kids',t:'Gia đình có trẻ nhỏ',e:'🧸',c:'var(--pink)',o:['👶 Có','🙅 Không']},
+ {k:'exp',t:'Kinh nghiệm nuôi chó',e:'🎒',c:'var(--purple)',o:['🌱 Lần đầu nuôi','🏅 Đã có kinh nghiệm']},
+ {k:'away',t:'Thời gian vắng nhà mỗi ngày',e:'⏰',c:'var(--orange)',o:['☕ Dưới 4 giờ','💼 Từ 4 đến 8 giờ','🌙 Trên 8 giờ']}];
+const LABEL={home:['Chung cư','Nhà riêng có sân vườn'],act:['Ưa vận động','Vận động nhẹ nhàng'],kids:['Có','Không'],exp:['Lần đầu nuôi','Đã có kinh nghiệm'],away:['Dưới 4 giờ','Từ 4 đến 8 giờ','Trên 8 giờ']};
+// default = selection saved in the Excel file
+const st={home:1,act:0,kids:1,exp:1,away:2}; // kids index: 0=Có,1=Không
+const inp=()=>({home:st.home,act:st.act,kids:st.kids===0,exp:st.exp,away:st.away});
+const LV={'Rất phù hợp':{c:'var(--lv1)',e:'💚'},'Phù hợp':{c:'var(--lv2)',e:'💙'},'Cân nhắc':{c:'var(--lv3)',e:'🤔'},'Không khuyến nghị':{c:'var(--lv4)',e:'🚫'}};
+const SZE={'Nhỏ':'🐶','Vừa':'🐕','Lớn':'🐕‍🦺'};
+const fmt=x=>x.toFixed(1).replace('.',',');
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const $=id=>document.getElementById(id);
+let RES=[];
+
+function buildQuestions(){
+  $('questions').innerHTML=Q.map(q=>`<div class="card q"><div class="qh"><div class="qe" style="background:${q.c}">${q.e}</div><h3>${q.t}</h3></div>
+   <div class="opts" role="group" aria-label="${q.t}">${q.o.map((o,i)=>`<button class="opt" style="--accent:${q.c}" data-k="${q.k}" data-i="${i}" aria-pressed="${st[q.k]===i}">${o}</button>`).join('')}</div></div>`).join('');
+  $('questions').addEventListener('click',e=>{
+    const b=e.target.closest('.opt'); if(!b) return;
+    const k=b.dataset.k,i=+b.dataset.i; if(st[k]===i) return;
+    st[k]=i; b.parentNode.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    burst(e.clientX,e.clientY); render();
+  });
+}
+function burst(x,y){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const em=['🐾','🦴','💛','🐾','✨','🐾'];
+  for(let i=0;i<7;i++){const s=document.createElement('span');s.className='paw';s.textContent=em[i%em.length];
+    const a=Math.random()*Math.PI*2,d=50+Math.random()*60;
+    s.style.left=(x-10)+'px';s.style.top=(y-12)+'px';s.style.setProperty('--dx',Math.cos(a)*d+'px');s.style.setProperty('--dy',(Math.sin(a)*d-30)+'px');s.style.setProperty('--rot',(Math.random()*120-60)+'deg');
+    document.body.appendChild(s);setTimeout(()=>s.remove(),950);}
+}
+const badge=l=>`<span class="badge" style="background:${LV[l].c}">${LV[l].e} ${l}</span>`;
+
+function render(){
+  const I=inp(); RES=rankAll(I);
+  const top=RES.slice(0,10);
+  // bubble
+  const a=LABEL;
+  $('bubble').innerHTML=`Gâu! Với nơi ở <b>${a.home[st.home].toLowerCase()}</b>, chủ nuôi <b>${a.act[st.act].toLowerCase()}</b>, <b>${st.kids===0?'có trẻ nhỏ':'không có trẻ nhỏ'}</b>, <b>${a.exp[st.exp].toLowerCase()}</b>, vắng nhà <b>${a.away[st.away].toLowerCase()}</b>/ngày – nên ưu tiên: <b>${esc(top[0].b.n)}</b> (${fmt(top[0].tot)} điểm), <b>${esc(top[1].b.n)}</b> (${fmt(top[1].tot)}), <b>${esc(top[2].b.n)}</b> (${fmt(top[2].tot)}). 🐾`;
+  $('bubble').classList.remove('pop'); void $('bubble').offsetWidth; $('bubble').classList.add('pop');
+  // podium (order 2,1,3)
+  const medals=['🥇','🥈','🥉'], cls=['p1','p2','p3'], stand=['var(--yellow)','#C9D3E0','#E6A26B'];
+  $('podium').innerHTML=[1,0,2].map(i=>{const r=top[i];return `<div class="card pod ${cls[i]}" tabindex="0" role="button" data-id="${r.b.id}" aria-label="Hạng ${i+1}: ${esc(r.b.n)}, ${fmt(r.tot)} điểm">
+    <div class="medal">${medals[i]}</div><h3>${esc(r.b.n)}</h3>
+    <div class="meta">${SZE[r.b.sz]} Cỡ ${r.b.sz.toLowerCase()} · ${fmt(r.wAvg)} kg · ${fmt(r.lAvg)} năm</div>
+    <div class="ring" style="--v:${r.tot};--rc:${LV[r.lvl].c}"><div>${fmt(r.tot)}</div></div>${badge(r.lvl)}
+    <div class="stand" style="background:${stand[i]}"></div></div>`}).join('');
+  // list 4-10
+  $('list').innerHTML=top.slice(3).map((r,j)=>`<div class="card row" tabindex="0" role="button" data-id="${r.b.id}">
+    <div class="rk">${j+4}</div>
+    <div><div class="nm">${esc(r.b.n)}</div><div class="sub"><span class="sz">${SZE[r.b.sz]} ${r.b.sz}</span>${badge(r.lvl)}${r.notes.length?`<span>⚠️ ${r.notes.length} lưu ý</span>`:''}</div></div>
+    <div class="bar"><i style="width:${r.tot}%;background:${LV[r.lvl].c}"></i></div>
+    <div class="pts">${fmt(r.tot)}</div></div>`).join('');
+  // summary
+  const cnt={}; Object.keys(LV).forEach(k=>cnt[k]=0); RES.forEach(r=>cnt[r.lvl]++);
+  $('summary').innerHTML=Object.keys(LV).map(k=>`<div class="card sum" style="background:${LV[k].c};color:#2B2340"><div class="ic">${LV[k].e}</div><div><div class="big">${cnt[k]}</div><div class="lb">${k}</div></div></div>`).join('')+
+    `<div class="card sum"><div class="ic">🐕</div><div><div class="big">${RES.length}</div><div class="lb">Tổng số giống</div></div></div>`;
+  renderScen(); renderWeights(I); renderAll();
+}
+function renderScen(){
+  const combos=[[0,0],[0,1],[1,0],[1,1]];
+  $('scen').innerHTML=combos.map(([h,a],i)=>{
+    const I={...inp(),home:h,act:a}; const t5=rankAll(I).slice(0,5); const cur=h===st.home&&a===st.act;
+    return `<div class="sc${cur?' cur':''}"><div class="tiny">TH${i+1}${cur?' · đang chọn':''}</div><h3>${h?'🌳':'🏢'} ${LABEL.home[h]} + ${a?'🧘':'🏃'} ${LABEL.act[a]}</h3>
+      <ol>${t5.map(r=>`<li>${esc(r.b.n)} <span>${fmt(r.tot)}</span></li>`).join('')}</ol></div>`}).join('');
+}
+function renderWeights(I){
+  const W=weights(I), S=W.reduce((x,y)=>x+y,0), mx=Math.max(...W)/S;
+  $('weights').innerHTML=CRIT.map((c,i)=>{const p=W[i]/S;return `<div class="wrow${p?'':' off'}"><span>${c.e}</span><span>${c.n}</span>
+    <div class="bar"><i style="width:${p/mx*100}%;background:var(--purple)"></i></div><span class="pct">${(p*100).toFixed(1).replace('.',',')}%</span></div>`}).join('');
+}
+function renderAll(){
+  const q=$('q').value.trim().toLowerCase();
+  const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').toLowerCase();
+  const nq=norm(q);
+  $('all').innerHTML=RES.map((r,i)=>({r,i})).filter(x=>!nq||norm(x.r.b.n).includes(nq)).map(({r,i})=>
+    `<button class="mini" data-id="${r.b.id}"><span class="r">#${i+1}</span><span class="dot" style="background:${LV[r.lvl].c}"></span><span class="n">${esc(r.b.n)}</span><span class="p">${fmt(r.tot)}</span></button>`).join('')||'<p class="tiny">Không tìm thấy giống nào 🐾</p>';
+}
+function openBreed(id){
+  const i=RES.findIndex(r=>r.b.id===id), r=RES[i], b=r.b, W=weights(inp());
+  $('dlgBody').innerHTML=`<div class="mh"><div class="em">${SZE[b.sz]}</div><div><div class="tiny">Hạng #${i+1} / ${RES.length}</div><h3>${esc(b.n)}</h3>${badge(r.lvl)}</div>
+    <button class="close" aria-label="Đóng" onclick="document.getElementById('dlg').close()">✕</button></div>
+   <div class="facts">
+    <div class="fact"><b>${fmt(r.tot)}/100</b><span>Tổng điểm</span></div>
+    <div class="fact"><b>${b.sz}</b><span>Kích thước</span></div>
+    <div class="fact"><b>${b.wmin}–${b.wmax} kg</b><span>Cân nặng</span></div>
+    <div class="fact"><b>${b.lmin}–${b.lmax} năm</b><span>Tuổi thọ</span></div></div>
+   <div class="crit">${CRIT.map((c,k)=>{const v=r.s[c.k];return `<div class="crow${W[k]?'':' off'}"><span>${c.e}</span><span>${c.n}${W[k]?'':' <span class="tiny">(không tính)</span>'}</span>
+     <div class="bar"><i style="width:${v/5*100}%;background:${v>=4?'var(--lv1)':v>=3?'var(--lv2)':v>=2?'var(--lv3)':'var(--lv4)'}"></i></div><b>${v}/5</b></div>`}).join('')}</div>
+   ${r.notes.length?`<div class="note warn"><h4>⚠️ Lưu ý với lựa chọn của bạn</h4>${r.notes.map(esc).join(' ')}</div>`:''}
+   <div class="note"><h4>🩺 Bệnh thường gặp</h4>${esc(b.dis)}</div>
+   <div class="note"><h4>🛁 Ghi chú chăm sóc</h4>${esc(b.note)}</div>`;
+  $('dlg').showModal();
+}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-id]'); if(t&&!t.closest('dialog')) openBreed(+t.dataset.id);});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.pod,.row')){e.preventDefault();openBreed(+e.target.dataset.id);}});
+$('dlg').addEventListener('click',e=>{if(e.target===$('dlg'))$('dlg').close();});
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>{x.setAttribute('aria-selected',x===t);$(x.dataset.tab).hidden=x!==t;});
+}));
+$('q').addEventListener('input',renderAll);
+$('src').textContent='Nguồn tham khảo: hồ sơ giống của AKC; trí thông minh quy đổi từ xếp hạng Stanley Coren (The Intelligence of Dogs); bệnh thường gặp theo tài liệu thú y phổ biến; chịu nóng, chịu ở một mình, phù hợp người mới nuôi ước lượng theo mô tả giống phổ biến. Số liệu mang tính tham khảo. 🐾';
+buildQuestions(); render();
+</script>
+</body>
+</html>
